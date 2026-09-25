@@ -1,0 +1,377 @@
+:root {
+    --bg-color: #161311;
+    --card-bg: rgba(43, 31, 23, 0.6);
+    --border-color: rgba(245, 158, 11, 0.15);
+    --primary: #f59e0b; /* Cheetah Amber */
+    --primary-hover: #d97706; /* Darker amber */
+    --accent: #fbbf24;
+    --danger: #ef4444;
+    --text-main: #fffbeb;
+    --text-muted: #a8a29e;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Outfit', sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(245, 158, 11, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(249, 115, 22, 0.12) 0px, transparent 50%);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Subtle Cheetah "Spots" (Organic Animal Print Pattern) */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: 
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cg fill='rgba(245,158,11,0.12)'%3E%3Cpath d='M20 20q10-5 15 5q-5 10-20 5z'/%3E%3Cellipse cx='80' cy='40' rx='6' ry='8' transform='rotate(45 80 40)'/%3E%3Cpath d='M150 20q10 10-5 20q-10-15 5-20z'/%3E%3Cellipse cx='30' cy='120' rx='8' ry='5' transform='rotate(-30 30 120)'/%3E%3Cpath d='M100 100q10-10 15 5q-10 5-20-5z'/%3E%3Cellipse cx='160' cy='130' rx='7' ry='10' transform='rotate(15 160 130)'/%3E%3Cpath d='M60 170q15-10 10 5q-10 10-20-5z'/%3E%3Cellipse cx='140' cy='180' rx='9' ry='6' transform='rotate(-60 140 180)'/%3E%3Cpath d='M190 80q5 15-5 10z'/%3E%3Cpath d='M10 70q10 10 5 15q-10-5-5-15z'/%3E%3Cellipse cx='90' cy='160' rx='6' ry='7'/%3E%3Cpath d='M120 60q10-5 5 10q-10-5-5-10z'/%3E%3C/g%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cg fill='rgba(245,158,11,0.08)'%3E%3Cpath d='M50 50q10-5 15 5q-5 10-20 5z'/%3E%3Cellipse cx='120' cy='60' rx='8' ry='11' transform='rotate(75 120 60)'/%3E%3Cpath d='M30 150q10 10-5 20q-10-15 5-20z'/%3E%3Cellipse cx='160' cy='100' rx='6' ry='5' transform='rotate(-10 160 100)'/%3E%3Cpath d='M80 180q10-10 15 5q-10 5-20-5z'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 200px 200px, 350px 350px; /* Different scales break the grid repetition */
+    background-position: 0 0, 50px 50px;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Base View logic */
+.view {
+    display: none;
+    width: 100vw;
+    max-width: 600px;
+    padding: 20px;
+    animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.view.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Glassmorphism Card */
+.glass-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+    width: 100%;
+}
+
+/* Typography */
+.glow-text {
+    font-size: 3rem;
+    font-weight: 700;
+    text-align: center;
+    background: linear-gradient(135deg, #fcd34d, #f97316);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+    letter-spacing: -1px;
+}
+.subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+    font-weight: 300;
+    font-size: 1.1rem;
+}
+
+/* Inputs & Buttons */
+input {
+    width: 100%;
+    padding: 16px 20px;
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    color: var(--text-main);
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.15);
+}
+input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    padding: 16px 28px;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    transition: all 0.2s ease;
+}
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+.primary-btn {
+    width: 100%;
+    background: var(--primary);
+    color: #161311;
+    box-shadow: 0 4px 14px 0 rgba(245, 158, 11, 0.39);
+}
+.primary-btn:hover:not(:disabled) {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px 0 rgba(245, 158, 11, 0.39);
+}
+.secondary-btn {
+    background: rgba(255,255,255,0.08);
+    color: white;
+    border: 1px solid var(--border-color);
+}
+.secondary-btn:hover:not(:disabled) {
+    background: rgba(255,255,255,0.15);
+}
+.danger-btn {
+    background: transparent;
+    color: var(--danger);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+.danger-btn:hover {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: var(--danger);
+}
+
+/* Home Layout */
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+.join-group {
+    display: flex;
+    gap: 12px;
+}
+.join-group input {
+    flex: 1;
+}
+.divider {
+    text-align: center;
+    position: relative;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+.divider::before, .divider::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 42%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border-color));
+}
+.divider::before { left: 0; }
+.divider::after { right: 0; background: linear-gradient(to left, transparent, var(--border-color)); }
+
+.error-msg {
+    color: var(--danger);
+    text-align: center;
+    margin-top: 16px;
+    font-size: 0.95rem;
+    min-height: 20px;
+    font-weight: 500;
+}
+
+/* Chat View Layout */
+.chat-container {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    height: 85vh;
+}
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+}
+.header-info h2 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: var(--text-muted);
+}
+#room-id-display {
+    color: var(--text-main);
+    font-weight: 700;
+}
+.status-indicator {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.dot {
+    width: 8px;
+    height: 8px;
+    background: var(--danger);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+.dot.active {
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+}
+
+.messages-area {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-right: 12px;
+    margin-bottom: 20px;
+}
+/* Custom Scrollbar */
+.messages-area::-webkit-scrollbar { width: 4px; }
+.messages-area::-webkit-scrollbar-track { background: transparent; }
+.messages-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+
+.message {
+    max-width: 85%;
+    padding: 14px 18px;
+    border-radius: 20px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    word-break: break-word;
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+@keyframes popIn {
+    from { opacity: 0; transform: scale(0.95) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.msg-self {
+    align-self: flex-end;
+    background: linear-gradient(135deg, var(--primary), #ea580c);
+    border-bottom-right-radius: 4px;
+    color: #161311;
+    font-weight: 500;
+}
+.msg-other {
+    align-self: flex-start;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-color);
+    border-bottom-left-radius: 4px;
+}
+.msg-system {
+    align-self: center;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-style: italic;
+    padding: 4px;
+    box-shadow: none;
+}
+
+.input-area {
+    display: flex;
+    gap: 12px;
+    position: relative;
+}
+.send-btn {
+    background: var(--primary);
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.send-btn:hover:not(:disabled) {
+    background: var(--primary-hover);
+    transform: scale(1.05);
+}
+.send-btn svg {
+    width: 22px;
+    height: 22px;
+}
+.char-count {
+    text-align: right;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 8px;
+    padding-right: 4px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    body {
+        /* Remove centering so it fills from the top */
+        align-items: flex-start;
+    }
+    
+    .view {
+        padding: 0;
+        max-width: 100%;
+        height: 100dvh; /* Dynamic viewport height handles mobile address bars perfectly */
+    }
+
+    .glass-card {
+        /* Remove borders and radius so it feels like a native app screen */
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        border-bottom: none;
+        border-top: none;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 24px 20px;
+    }
+
+    .chat-container.glass-card {
+        justify-content: flex-start;
+        padding: 16px 12px;
+    }
+
+    .glow-text {
+        font-size: 2.2rem;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+        margin-bottom: 30px;
+    }
+
+    .message {
+        max-width: 90%; /* Let messages span a bit wider on small screens */
+        padding: 12px 16px;
+    }
+
+    input, button {
+        /* Ensure inputs and buttons are easily tappable */
+        padding: 14px 18px;
+        font-size: 16px; /* Prevents iOS Safari from auto-zooming when tapping inputs */
+    }
+}

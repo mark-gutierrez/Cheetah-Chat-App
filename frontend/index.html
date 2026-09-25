@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cheetah Chat | Ephemeral</title>
+    <!-- Modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Landing / Home View -->
+        <div id="home-view" class="view active">
+            <div class="glass-card">
+                <h1 class="glow-text">Cheetah Chat</h1>
+                <p class="subtitle">Messages come as fast as they go</p>
+                
+                <div class="actions">
+                    <button id="btn-create" class="primary-btn">Create Global Chat</button>
+                    
+                    <div class="divider"><span>OR</span></div>
+                    
+                    <div class="join-group">
+                        <input type="text" id="input-join" placeholder="Enter Chat ID" autocomplete="off">
+                        <button id="btn-join" class="secondary-btn">Join</button>
+                    </div>
+                </div>
+                <div id="home-error" class="error-msg"></div>
+            </div>
+        </div>
+
+        <!-- Chat Room View -->
+        <div id="chat-view" class="view">
+            <div class="chat-container glass-card">
+                <header class="chat-header">
+                    <div class="header-info">
+                        <h2>Room: <span id="room-id-display"></span></h2>
+                        <p class="status-indicator"><span class="dot"></span> <span id="status-text">Connecting...</span></p>
+                    </div>
+                    <button id="btn-leave" class="danger-btn">Leave</button>
+                </header>
+                
+                <div id="messages-container" class="messages-area">
+                    <!-- Messages are dynamically injected here -->
+                </div>
+                
+                <form id="chat-form" class="input-area">
+                    <input type="text" id="message-input" placeholder="Type a message..." maxlength="218" autocomplete="off" required disabled>
+                    <button type="submit" class="send-btn" id="btn-send" disabled>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                    </button>
+                </form>
+                <div class="char-count"><span id="char-current">0</span> / 218</div>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
