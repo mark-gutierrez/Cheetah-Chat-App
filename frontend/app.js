@@ -1,9 +1,10 @@
 // --- CONFIGURATION ---
 // Change this to your Render URL when deploying (e.g., 'your-app.onrender.com')
-const BACKEND_DOMAIN = 'localhost:8080'; 
+const BACKEND_DOMAIN = 'cheetah-chat-backend.onrender.com';
 
 // Set to true when deploying to Render (enables https:// and wss://)
-const IS_PRODUCTION = false; 
+const IS_PRODUCTION = true;
+
 
 const API_URL = `${IS_PRODUCTION ? 'https' : 'http'}://${BACKEND_DOMAIN}/api/create`;
 const WS_URL = `${IS_PRODUCTION ? 'wss' : 'ws'}://${BACKEND_DOMAIN}/ws/`;
@@ -33,7 +34,7 @@ let currentChatId = null;
 // Pure UUID generation
 function generateUUID() {
     if (crypto.randomUUID) return crypto.randomUUID();
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
@@ -70,20 +71,20 @@ btnCreate.addEventListener('click', async () => {
         btnCreate.disabled = true;
         btnCreate.innerText = 'Creating...';
         homeError.innerText = '';
-        
+
         const response = await fetch(API_URL, { method: 'POST' });
-        
+
         if (!response.ok) {
             const err = await response.text();
             throw new Error(err);
         }
-        
+
         const data = await response.json();
         joinChat(data.chat_id);
     } catch (error) {
         // If fetch fails completely, it might be a CORS error or server offline
-        homeError.innerText = error.message === "Failed to fetch" 
-            ? "Cannot connect to server. Is it running?" 
+        homeError.innerText = error.message === "Failed to fetch"
+            ? "Cannot connect to server. Is it running?"
             : error.message;
     } finally {
         btnCreate.disabled = false;
@@ -111,13 +112,13 @@ messageInput.addEventListener('input', () => {
 chatForm.addEventListener('submit', (e) => {
     e.preventDefault();
     if (!ws || ws.readyState !== WebSocket.OPEN) return;
-    
+
     const text = messageInput.value.trim();
     if (!text) return;
-    
+
     const payload = `${userId}:${text}`;
     ws.send(payload);
-    
+
     messageInput.value = '';
     charCurrent.innerText = '0';
 });
@@ -127,17 +128,17 @@ btnLeave.addEventListener('click', () => leaveChat());
 // Functions
 function joinChat(chatId) {
     currentChatId = chatId;
-    
+
     // Update the URL Hash so it can be shared (e.g. yoursite.github.io/#1234abcd)
     if (window.location.hash !== `#${chatId}`) {
         window.location.hash = chatId;
     }
-    
+
     homeView.classList.remove('active');
     chatView.classList.add('active');
     roomIdDisplay.innerText = chatId;
-    messagesContainer.innerHTML = ''; 
-    
+    messagesContainer.innerHTML = '';
+
     connectWebSocket(chatId);
 }
 
@@ -147,12 +148,12 @@ function leaveChat(errorMsg = '') {
         ws = null;
     }
     currentChatId = null;
-    
+
     // Clear hash without reloading the page
     if (window.location.hash !== '') {
         window.history.pushState("", document.title, window.location.pathname + window.location.search);
     }
-    
+
     chatView.classList.remove('active');
     homeView.classList.add('active');
     inputJoin.value = '';
@@ -162,9 +163,9 @@ function leaveChat(errorMsg = '') {
 function connectWebSocket(chatId) {
     statusDot.classList.remove('active');
     statusText.innerText = "Connecting...";
-    
+
     ws = new WebSocket(`${WS_URL}${chatId}?user=${userId}`);
-    
+
     ws.onopen = () => {
         statusDot.classList.add('active');
         statusText.innerText = "Connected";
@@ -173,16 +174,16 @@ function connectWebSocket(chatId) {
         btnSend.disabled = false;
         messageInput.focus();
     };
-    
+
     ws.onmessage = async (event) => {
         let text = "";
-        
+
         if (event.data instanceof Blob) {
             text = await event.data.text();
         } else {
             text = event.data;
         }
-        
+
         // Handle server rejections
         if (text.startsWith("ERROR:")) {
             if (text.includes("full") || text.includes("not found")) {
@@ -196,27 +197,27 @@ function connectWebSocket(chatId) {
                 return;
             }
         }
-        
+
         const sepIndex = text.indexOf(':');
         if (sepIndex === -1) {
             appendMessage(text, 'msg-other');
             return;
         }
-        
+
         const senderId = text.substring(0, sepIndex);
         const actualMessage = text.substring(sepIndex + 1);
-        
+
         const type = (senderId === userId) ? 'msg-self' : 'msg-other';
         appendMessage(actualMessage, type);
     };
-    
+
     ws.onclose = () => {
         // If the websocket closes unexpectedly, we boot them out
         if (currentChatId) {
             leaveChat("Disconnected from server.");
         }
     };
-    
+
     ws.onerror = () => {
         if (currentChatId) {
             leaveChat("Connection error: Chat might not exist.");
@@ -229,7 +230,7 @@ function appendMessage(text, className) {
     div.classList.add('message', className);
     div.textContent = text;
     messagesContainer.appendChild(div);
-    
+
     messagesContainer.scrollTo({
         top: messagesContainer.scrollHeight,
         behavior: 'smooth'
