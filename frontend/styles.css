@@ -325,6 +325,11 @@ button:disabled {
 
 /* Mobile Responsiveness */
 @media (max-width: 600px) {
+    html, body {
+        height: 100%;
+        overflow: hidden;
+    }
+
     body {
         /* Remove centering so it fills from the top */
         align-items: flex-start;
@@ -333,7 +338,10 @@ button:disabled {
     .view {
         padding: 0;
         max-width: 100%;
-        height: 100dvh; /* Dynamic viewport height handles mobile address bars perfectly */
+        height: 100dvh;
+        /* Dynamic viewport height handles mobile address bars perfectly */
+        display: flex;
+        flex-direction: column;
     }
 
     .glass-card {
@@ -343,7 +351,7 @@ button:disabled {
         border-right: none;
         border-bottom: none;
         border-top: none;
-        height: 100%;
+        flex: 1;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -351,8 +359,40 @@ button:disabled {
     }
 
     .chat-container.glass-card {
+        padding: 0;
+        overflow: hidden; /* Locks the header and footer in place */
         justify-content: flex-start;
-        padding: 16px 12px;
+    }
+    
+    .chat-header {
+        padding: 16px 20px;
+        margin: 0;
+        background: rgba(43, 31, 23, 0.95);
+        border-bottom: 1px solid var(--border-color);
+        flex-shrink: 0;
+    }
+
+    .messages-area {
+        flex: 1;
+        padding: 16px 20px;
+        margin: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch; /* Momentum scrolling for iOS */
+    }
+
+    .input-area {
+        padding: 12px 20px 4px;
+        margin: 0;
+        background: rgba(43, 31, 23, 0.95);
+        border-top: 1px solid var(--border-color);
+        flex-shrink: 0;
+    }
+
+    .char-count {
+        padding: 0 24px 12px;
+        margin: 0;
+        background: rgba(43, 31, 23, 0.95);
+        flex-shrink: 0;
     }
 
     .glow-text {
