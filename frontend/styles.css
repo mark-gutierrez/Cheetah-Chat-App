@@ -340,6 +340,10 @@ button:disabled {
         max-width: 100%;
         height: 100dvh;
         /* Dynamic viewport height handles mobile address bars perfectly */
+        display: none;
+    }
+    
+    .view.active {
         display: flex;
         flex-direction: column;
     }
